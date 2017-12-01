@@ -40,9 +40,10 @@
         }
         .leftbar ul {
             padding-left:       10px;
+            list-style:         none;
         }
         .leftbar ul li {
-            margin-top:         -15px;
+            margin-top:         0px;
         }
         .leftbar ul li a {
             display:            inline-block;

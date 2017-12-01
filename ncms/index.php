@@ -1,6 +1,6 @@
 <?
-    require_once($_SERVER["DOCUMENT_ROOT"] . "/config.php");
-    require_once($_SERVER["DOCUMENT_ROOT"] . "/ncms/init.php");
+    require_once("../config.php");
+    require_once(SITE_ROOT . "/ncms/init.php");
 
     {
         define("CURRENT_TEMPLATE", "admin");
@@ -12,6 +12,6 @@
         define("FRAME_NAME", "Admin");
     }
 
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/ncms/templates/" . CURRENT_TEMPLATE . "/header.php");
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/ncms/frames/" . FRAME_NAME . "/templates/admin/template.php");
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/ncms/templates/" . CURRENT_TEMPLATE . "/footer.php");
+    include_once(SITE_ROOT . "/ncms/templates/" . CURRENT_TEMPLATE . "/header.php");
+    include_once(SITE_ROOT . "/ncms/frames/" . FRAME_NAME . "/templates/admin/template.php");
+    include_once(SITE_ROOT . "/ncms/templates/" . CURRENT_TEMPLATE . "/footer.php");
