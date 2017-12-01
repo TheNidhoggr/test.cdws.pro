@@ -13,5 +13,5 @@
     }
 
     include_once($_SERVER["DOCUMENT_ROOT"] . "/ncms/templates/" . CURRENT_TEMPLATE . "/header.php");
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/ncms/frames/" . FRAME_NAME . "/templates/" . CURRENT_TEMPLATE . "/template.php");
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/ncms/frames/" . FRAME_NAME . "/templates/admin/template.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/ncms/templates/" . CURRENT_TEMPLATE . "/footer.php");
