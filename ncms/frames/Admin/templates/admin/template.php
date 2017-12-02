@@ -7,6 +7,3 @@
             include_once($stAdminFile);
         }
     }
-    if (isset($_GET["page"])) {
-        
-    }
