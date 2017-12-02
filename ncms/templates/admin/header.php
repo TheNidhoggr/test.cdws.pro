@@ -1,3 +1,13 @@
+<?
+function show_msg() {
+    if (onGet("errmsg")) {
+        echo "<div onclick=\"this.parentNode.removeChild(this);\" class=\"msg error\">".onGet("errmsg")."</div>";
+    }
+    if (onGet("successmsg")) {
+        echo "<div onclick=\"this.parentNode.removeChild(this);\" class=\"msg success\">".onGet("successmsg")."</div>";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="<?=$arSite["lang"]?>">
 <head>
@@ -81,21 +91,17 @@
     <div style="height:50px"></div>
     <ul>
         <?// Menu starts here?>
-        <li><a href="#">ВСЕ</a></li>
+        <li><a href="?">ВСЕ</a></li>
         <hr />
-        <li><a href="#">Редактировать меню</a></li>
-        <li><a href="#">Галерея</a></li>
-        <li><a href="#">Подключенные модули</a></li>
-        <li><a href="#">Проверка обновлений из жопы полярного сервера на морде динозавра</a></li>
         <?// Menu ends here?>
         <?
-//            Atom(
-//                "menu",
-//                "admin-left",
-//                array(
-//                    "TYPE" => "admin-left"
-//                )
-//            );
+            Atom(
+                "menu",
+                "admin_favs",
+                array(
+                    "TYPE" => "admin_favs"
+                )
+            );
         ?>
     </ul>
 </div>
