@@ -1,7 +1,7 @@
 <?
     mb_internal_encoding("UTF-8");
     $arKernel = array(
-        $_SERVER["DOCUMENT_ROOT"] . "/ncms/cores"
+        SITE_ROOT . "/ncms/cores"
     );
 
     foreach ($arKernel as $stDirCore) {
