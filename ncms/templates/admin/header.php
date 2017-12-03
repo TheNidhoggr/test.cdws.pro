@@ -1,4 +1,5 @@
 <?
+if (!SITE_ROOT) die("This script must be called");
 function show_msg() {
     if (onGet("errmsg")) {
         echo "<div onclick=\"this.parentNode.removeChild(this);\" class=\"msg error\">".onGet("errmsg")."</div>";
@@ -39,7 +40,7 @@ function show_msg() {
             margin-left:        10px;
         }
         .leftbar {
-            position:           absolute;
+            position:           fixed;
             height:             100%;
             width:              200px;
             padding-right:      10px;
@@ -75,9 +76,49 @@ function show_msg() {
             color:              rgb(171, 171, 171);
             text-decoration:    none;
         }
-        a:hover {
+        a:hover, a.active {
             color:              rgb(250, 250, 250);
             text-decoration:    underline;
+        }
+        input {
+            margin:             3px 0;
+        }
+        .menuitem {
+            /*border: 1px dotted white;*/
+            border:             2px solid rgb(45, 45, 45);
+            display:            table-cell;
+            width:              140px;
+            height:             30px;
+            text-align:         left;
+            padding:            10px 10px 10px 60px;
+            vertical-align:     middle;
+            background-color:   rgba(0, 0, 0, 0);
+            background-position: 0 50%;
+            background-repeat:  no-repeat;
+            background-size:    contain;
+            transition:         0.4s;
+        }
+        .menuitem:hover, .menuitem.active {
+            background-color:   rgba(200, 200, 200, 0.3);
+            transition:         0.15s;
+        }
+        button, input[type="submit"] {
+            padding:            5px;
+            background:         none;
+            border:             2px solid rgb(45, 45, 45);
+            color:              white;
+            transition:         0.25s;
+        }
+        button.selected, input[type="submit"] {
+            border:             2px solid rgb(64, 255, 0);
+            color:              rgb(64, 255, 0);
+        }
+        button.warning {
+            border:             2px solid rgb(255, 255, 0);
+            color:              rgb(255, 255, 0);
+        }
+        tr td {
+            border-bottom:      2px solid rgb(45, 45, 45);
         }
     </style>
 </head>

@@ -1,3 +1,4 @@
+<?if (!SITE_ROOT) die("This script must be called"); ?>
 <div class="container">&nbsp;
     <div class="row">
         <div class="col-lg-12">

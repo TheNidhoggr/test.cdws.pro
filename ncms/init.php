@@ -1,4 +1,5 @@
 <?
+if (!SITE_ROOT) die("This script must be called");
     mb_internal_encoding("UTF-8");
     $arKernel = array(
         SITE_ROOT . "/ncms/cores"

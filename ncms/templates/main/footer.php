@@ -1,3 +1,6 @@
+<?
+if (!SITE_ROOT) die("This script must be called");
+?>
 <!-- Default panel contents -->
 <!-- Table -->&nbsp;</div>
 </div>

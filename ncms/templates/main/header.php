@@ -1,3 +1,6 @@
+<?
+if (!SITE_ROOT) die("This script must be called");
+?>
 <!DOCTYPE html>
 <html lang="<?=$arSite["lang"]?>">
 <head>

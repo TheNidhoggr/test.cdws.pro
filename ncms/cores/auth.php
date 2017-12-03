@@ -1,4 +1,5 @@
 <?
+if (!SITE_ROOT) die("This script must be called");
 class Auth
 {
     private static $rootPasswordHash = "32bbf1db31daba72868385114e6b9078";

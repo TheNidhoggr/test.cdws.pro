@@ -1,4 +1,5 @@
 <?
+    if (!SITE_ROOT) die("This script must be called");
 if (onGet("page") == "menu") {
     ?>
         <h2><a href="?page=menu">Menu</a></h2>
@@ -80,7 +81,9 @@ if (onGet("page") == "menu") {
                         WHERE `id` = '".onGet("id")."'";
                     $res = $connect->query($query);
                     if ($res == 1) {
-                        set_location("?page=menu&show=".$stShow."&sucessmsg=Changes saved");
+                        IMsg::Success("Changes saved");
+                    } else {
+                        IMsg::Error($connect->error);
                     }
                     break;
                 }
@@ -102,9 +105,9 @@ if (onGet("page") == "menu") {
                         )";
                     $res = $connect->query($query);
                     if ($res == true) {
-                        set_location("?page=menu&show=".$stShow."&successmsg=Item+added");
+                        IMsg::Success("Menu item added");
                     } else {
-                        set_location("?page=menu&show=".$stShow."&errmsg=Error" . $connect->error);
+                        IMsg::Error($connect->error);
                     }
                     break;
                 }
@@ -114,7 +117,12 @@ if (onGet("page") == "menu") {
                             `id` = '".onGet("id")."'
                             OR `parentid` = '".onGet("id")."'
                     ";
-                    $connect->query($query);
+                    $res = $connect->query($query);
+                    if ($res == true) {
+                        IMsg::Success("Menu item deleted");
+                    } else {
+                        IMsg::Error($connect->error);
+                    }
                     break;
                 }
             }
@@ -148,7 +156,7 @@ if (onGet("page") == "menu") {
     }
 } elseif(onGet("page") == false) {
     ?>
-        <a href="?page=menu"><div class="menuitem">
+        <a href="?page=menu"><div class="menuitem" style="background-image: url('packs/menu/pack-icon.png');">
             Управление меню
         </div></a>
     <?

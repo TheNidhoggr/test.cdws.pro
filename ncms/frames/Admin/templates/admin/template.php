@@ -1,4 +1,5 @@
 <?
+if (!SITE_ROOT) die("This script must be called");
     $dirPacksDir = SITE_ROOT . "/ncms/packs";
     $arPacks = scandir($dirPacksDir);
     foreach ($arPacks as $dirPack) {

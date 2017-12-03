@@ -1,4 +1,5 @@
 <?
+if (!SITE_ROOT) die("This script must be called");
 function onGet($getKey) {
     $result = false;
     if (isset($_GET[$getKey]) == true) {
@@ -12,4 +13,12 @@ function onPost($postKey) {
         $result = $_POST[$postKey];
     }
     return $result;
+}
+function safeGet($getKey) {
+    global $connect;
+    return $connect->real_escape_string(onGet($getKey));
+}
+function safePost($postKey) {
+    global $connect;
+    return $connect->real_escape_string(onGet($postKey));
 }
