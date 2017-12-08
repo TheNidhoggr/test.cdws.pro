@@ -11,7 +11,9 @@ switch(onGet("action")) {
                         VALUES
                             ('0', 'uploaddir', '".safeGet("uploaddir")."'),
                             ('0', 'readrights', '".safeGet("readrights")."'),
-                            ('0', 'writerights', '".safeGet("writerights")."')
+                            ('0', 'writerights', '".safeGet("writerights")."'),
+                            ('0', 'thumb_height', '".safeGet("thumb_height")."'),
+                            ('0', 'thumb_width', '".safeGet("thumb_width")."')
                         ON DUPLICATE KEY UPDATE
                             `id` = VALUES(`id`),
                             `key` = VALUES(`key`),
@@ -43,5 +45,8 @@ switch(onGet("action")) {
         На чтение <input type="number" name="readrights" value="<?=$arPackData["readrights"]?>" /><br />
         На запись <input type="number" name="writerights" value="<?=$arPackData["writerights"]?>" /><br />
         <br />
+        Размер уменьшенного изображения<br />
+        Ширина <input type="number" name="thumb_width" value="<?=$arPackData["thumb_width"]?>"><br />
+        Высота <input type="number" name="thumb_height" value="<?=$arPackData["thumb_height"]?>"><br />
         <input type="submit" value="Сохранить настройки" />
     </form>

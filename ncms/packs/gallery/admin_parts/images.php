@@ -1,10 +1,15 @@
 <?
-if (!SITE_ROOT) die("This script must be called");
+if (!SITE_ROOT) die();
 $arGallerySettings = CdwsGallery::FetchSettings();
 ?>
 <a href="?page=cdws.gallery&cat=images&action=add">
     <div class="menuitem<?=NMenu::Active("action=add")?>" style="background-image:url('packs/gallery/admin_parts/icons/add.png')">
         Добавить
+    </div>
+</a>
+<a href="?page=cdws.gallery&cat=images&action=replaceallthumbs">
+    <div class="menuitem" style="background-image:url('packs/gallery/admin_parts/icons/add.png')">
+        Изменить эскизы
     </div>
 </a>
 <hr />
@@ -100,6 +105,74 @@ switch(onGet("action")) {
         } else {
             IMsg::Error($connect->error);
         }
+        break;
+    }
+    case "delete": {
+        $stQuery = "SELECT * FROM `ncms_pack_cdws_gallery_images`
+            WHERE `id` = '" . safeGet("id") . "'";
+        $res = $connect->query($stQuery);
+        if ($res->num_rows < 1) {
+            IMsg::Error("Изображение с ID <b>" . safeGet("id") . "</b> не найдено");
+        } else {
+            $row = $res->fetch_assoc();
+            $filename = $row["upload_src"];
+            $filePath = SITE_ROOT . "/ncms/upload/" . $arGallerySettings["uploaddir"] . "/" . $filename;
+            $fileThumbPath = SITE_ROOT . "/ncms/upload/" . $arGallerySettings["uploaddir"] . "/thumbnails/" . $filename;
+            if (unlink($filePath) == true) IMsg::Success("Изображение удалено");
+            else IMsg::Error("Ошибка удаления изображения");
+            if (unlink($fileThumbPath) == true) IMsg::Success("Уменьшенное изображение удалено");
+            else IMsg::Error("Ошибка удаления уменьшенного изображения");
+            $stQuery = "DELETE FROM `ncms_pack_cdws_gallery_images`
+                WHERE `id` = '" . safeGet("id") . "'";
+            $res = $connect->query($stQuery);
+            if ($res == 1) {
+                IMsg::Success("Запись удалена из базы данных");
+            } else {
+                IMsg::Error("Ошибка удаления записи из базы данных");
+            }
+        }
+        break;
+    }
+    case "replacethumb": {
+        include_once("thumbnail_func.php");
+        $stQuery = "SELECT * FROM `ncms_pack_cdws_gallery_images`
+            WHERE `id` = '" . safeGet("id") . "'";
+        $res = $connect->query($stQuery);
+        $row = $res->fetch_assoc();
+        $res = image_resize(SITE_ROOT . "/ncms/upload/" . $arGallerySettings["uploaddir"] . "/" . $row["upload_src"],
+            SITE_ROOT . "/ncms/upload/" . $arGallerySettings["uploaddir"] . "/thumbnails/" . $row["upload_src"],
+            intval($arGallerySettings["thumb_width"]),
+            intval($arGallerySettings["thumb_height"])
+        );
+        if ($res != false) {
+            IMsg::Success("Новая миниатюра создана");
+        } else {
+            IMsg::Warning("Скрипт отработал, но не вернул ответ. Очистите кеш браузера, обновите страницу галереи и проверьте результат визуально");
+        }
+        break;
+    }
+    case "replaceallthumbs": {
+        include_once("thumbnail_func.php");
+        $stQuery = "SELECT * FROM `ncms_pack_cdws_gallery_images`";
+        $rsImages = $connect->query($stQuery) or die($connect->error);
+        $resizeSuccessCount = 0;
+        $resizeWarningCount = 0;
+        while ($arImage = $rsImages->fetch_assoc()) {
+            $filePath = SITE_ROOT . "/ncms/upload/" . $arGallerySettings["uploaddir"] . "/" . $arImage["upload_src"];
+            $fileThumbPath = SITE_ROOT . "/ncms/upload/" . $arGallerySettings["uploaddir"] . "/thumbnails/" . $arImage["upload_src"];
+            $res = image_resize($filePath, $fileThumbPath, intval($arGallerySettings["thumb_width"]), intval($arGallerySettings["thumb_height"]));
+            if ($res != false) {
+                $resizeSuccessCount++;
+            } else {
+                $resizeWarningCount++;
+            }
+        }
+        if ($resizeSuccessCount > 0) {
+            IMsg::Success("Новые миниатюры созданы в количестве " . $resizeSuccessCount);
+        } else {
+            IMsg::Warning("Скрипт отработал, но не вернул ответ. Очистите кеш браузера, обновите страницу галереи и проверьте результат визуально");
+        }
+        break;
     }
 }
 $rsAllImages = $connect->query("SELECT * FROM `ncms_pack_cdws_gallery_images` ORDER BY `id` DESC");
@@ -113,7 +186,7 @@ $rsAllImages = $connect->query("SELECT * FROM `ncms_pack_cdws_gallery_images` OR
         <td>Теги</td>
         <td>Название</td>
         <td>Описание</td>
-        <td>Стоимость сессии</td>
+        <td>Дата загрузки</td>
         <td>Пул</td>
         <td>Место в пуле</td>
         <td>Действия</td>
@@ -130,12 +203,22 @@ $rsAllImages = $connect->query("SELECT * FROM `ncms_pack_cdws_gallery_images` OR
             </td>
             <td><?=$arImage["name"]?></td>
             <td><?=$arImage["description"]?></td>
-            <td><?=$arImage["priced"]?></td>
+            <?
+            $arImageTimestamp = substr_replace($arImage["timestamp"],"." , 4, 0);
+            $arImageTimestamp = substr_replace($arImageTimestamp,"." , 7, 0);
+            $arImageTimestamp = substr_replace($arImageTimestamp,"<br />" , 10, 0);
+            $arImageTimestamp = substr_replace($arImageTimestamp,":" , -2, 0);
+            $arImageTimestamp = substr_replace($arImageTimestamp,":" , -5, 0);
+            ?>
+            <td><?=$arImageTimestamp?></td>
             <td>
                 <button onclick="location.href='?page=cdws.gallery&cat=images&action=editinpool&id=<?=$arImage["id"]?>'">[<?=$arImage["pool"]?>]</button>
             </td>
             <td><?=$arImage["pool_order"]?></td>
-            <td></td>
+            <td>
+                <button onclick="if (confirm('Это действие бедут невозможно отменить. Продолжить?'))location.href='?page=cdws.gallery&cat=images&action=delete&id=<?=$arImage["id"]?>'">Удалить</button>
+                <button onclick="location.href='?page=cdws.gallery&cat=images&action=replacethumb&id=<?=$arImage["id"]?>'">Пересоздать миниатюру</button>
+            </td>
         </tr>
     <?endwhile;?>
 </table>

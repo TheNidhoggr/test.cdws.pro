@@ -1,10 +1,10 @@
 <?
 session_start();
-require_once("../config.php");
+require_once("../../config.php");
 require_once(SITE_ROOT . "/ncms/init.php");
 
 {
-    define("CURRENT_TEMPLATE", "admin");
+    define("CURRENT_TEMPLATE", "gallery");
     $arFrame = array(
         "title" => "Gallery",
         "html_title" => "Gallery",
